@@ -1,0 +1,6 @@
+
+class extracter(object):
+    """
+
+    """
+    pass
