@@ -2,6 +2,9 @@ from abc import abstractmethod
 
 from cvparser.utility.ult import *
 class parser:
+    """
+    parser abstract class, to parse doc
+    """
     def __init__(self,file,filetype):
         self.filetype = filetype
         self.filename=get_filename(file)

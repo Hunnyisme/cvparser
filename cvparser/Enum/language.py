@@ -2,5 +2,5 @@ from enum import Enum
 
 
 class Language(Enum):
-    en=0,
-    zh=1
+    en="en"
+    zh_cn = "zh-cn"

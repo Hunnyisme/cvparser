@@ -3,10 +3,11 @@ import re
 import spacy
 from pdfminer.high_level import *
 from pathlib import Path
-import cvparser.loadcvparser
-from cvparser import pre_clean
+import cvparser.cv_parser
+from cvparser.factories.extractor_factory import ExtractorFactory
+
 from cvparser.utility.ult import *
-from cvparser.loadcvparser import *
+from cvparser.cv_parser import *
 if __name__ == '__main__':
 
     # def sanitize_path(file_path: str) -> Path:
@@ -17,10 +18,18 @@ if __name__ == '__main__':
     #
     #     # 转换为 Path 对象并返回绝对路径
     #     return Path(file_path).resolve(strict=False)
-    parser=loader.load("E:\\onedrivefiles\\OneDrive\\PycharmProjects\\cvparser\\test_data\\resume-de.pdf")
+    parser=CvParser.load("E:\\PycharmProjects\cvparser\\test_data\\resume_template.pdf")
+
     #print(FileType.PDF.value)
     #print(str(sanitize_path("E:\\onedrivefiles\\OneDrive\\PycharmProjects\\cvparser\\test_data\\resume-de.pdf")))
-    parser.parse()
+    doc=parser.parse()
+    print(doc.text)
+    en_extractor=ExtractorFactory.get_extractor(doc).extract()
+
+    # print(parser.file)
+
+    # print(parser.filetype)
+    # print(parser.filesize)
     # print(filetype_detect("asiii.txt.pdf .zip"))
     # print(language_detect("I am your father"))
     # print(get_filename("asiii.zip"))
@@ -40,7 +49,7 @@ if __name__ == '__main__':
     # print("------------------------------")
     #
     #
-    # nlp = spacy.load("en_core_web_sm")
+    #
 
     # print(nlp.pipe_names)
     # root = [token for token in doc if token.head == token]
