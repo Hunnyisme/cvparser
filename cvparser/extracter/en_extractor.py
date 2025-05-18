@@ -14,9 +14,12 @@ class EnglishExtractor(Extractor):
         #print(person_name)
         # for token in doc:
         #     #if token.ent_type_ !="":
+        #     if token.ent_type_=="ORG" or token.ent_type_=="DATE":
         #      print( token.text,token.ent_type_)
-        print(self.__get_school_list(doc))
-        print(self.__get_company_list(doc))
+        #print(self.__get_school_list(doc))
+        print("----------------------")
+        #print(self.__get_company_list(doc))
+        print(self.__get_work_date_company(doc))
 
 
     def __get_person_name(self,doc):
@@ -62,6 +65,37 @@ class EnglishExtractor(Extractor):
                 company_list.append(match.group())
 
         return company_list
+
+    def __is_company(self,text):
+        pattern = r"\b[A-Za-z\s\-\(\)]+(?:Inc\.|Corporation|Limited|Group|Co\.|LLC|PLC|AG|SE|Company|Holdings|LLP)\b"
+        if re.search(pattern, text, re.IGNORECASE):
+            return True
+        return False
+
+
+    def __get_work_date_company(self,doc):
+        work_date_company={}
+        ents = doc.ents
+        ents_list=[]
+        for ent in ents:
+            if ent.label_ == 'DATE' or ent.label_ == 'ORG':
+                ents_list.append(ent)
+        for i in range(len(ents_list)):
+            if self.__is_company(ents_list[i].text) and i+1 < len(ents_list) and ents_list[i+1].label_ == 'DATE':
+                work_date_company.update({ents_list[i].text: ents_list[i+1].text})
+
+        return work_date_company
+
+
+
+
+
+
+
+
+
+
+
 
 
 
