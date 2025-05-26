@@ -9,47 +9,50 @@ class EnglishExtractor(Extractor):
 
     def extract(self):
         nlp=spacy.load('en_core_web_trf')
-        doc=nlp(self.doc.text)
-        person_name=self.__get_person_name(doc)
+        nlp_doc=nlp(self.doc.text)
+        person_name=self.__get_person_name(nlp_doc)
         #print(person_name)
-        # for token in doc:
+        # for token in nlp_doc:
         #     #if token.ent_type_ !="":
         #     if token.ent_type_=="ORG" or token.ent_type_=="DATE":
         #      print( token.text,token.ent_type_)
-        #print(self.__get_school_list(doc))
+        #print(self.__get_school_list(nlp_doc))
 
-        #print(self.__get_company_list(doc))
-        print(self.__get_work_date_company(doc))
+        #print(self.__get_company_list(nlp_doc))
+        print(self.__get_work_date_company(nlp_doc))
         print("----------------------")
-        print(self.__get_education_date(doc))
+        print(self.__get_education_date(nlp_doc))
+        print("----------------------")
+        self.__get_age(nlp_doc)
+        #print("----------------------")
 
 
-    def __get_person_name(self,doc):
-        for token in doc.ents:
+    def __get_person_name(self, nlp_doc):
+        for token in nlp_doc.ents:
             if token.label_ == 'PERSON':
                 return token.text
 
         return None
 
-    def __get_org_name(self, doc):
+    def __get_org_name(self, nlp_doc):
         orglist=[]
-        for token in doc.ents:
+        for token in nlp_doc.ents:
             if token.label_ == 'ORG':
                 orglist.append(token.text)
 
         return  orglist
 
-    def __get_address_list(self,doc):
+    def __get_address_list(self, nlp_doc):
         address_list=[]
-        for token in doc.ents:
+        for token in nlp_doc.ents:
             if token.label_ == 'GPE' or token.label_ == 'FAC' or token.label_ == 'LOC':
                 address_list.append(token.text)
 
         return address_list
 
-    def __get_school_list(self,doc):
+    def __get_school_list(self, nlp_doc):
         school_list=[]
-        orglist=self.__get_org_name(doc)
+        orglist=self.__get_org_name(nlp_doc)
         for o in orglist:
             match=re.search(r".+?school|.+?college|.+?university", o,re.IGNORECASE)
             if match is not None:
@@ -57,10 +60,10 @@ class EnglishExtractor(Extractor):
 
         return school_list
 
-    def __get_company_list(self,doc):
+    def __get_company_list(self, nlp_doc):
         company_list=[]
         pattern=r"\b[A-Za-z\s\-\(\)]+(?:Inc\.|Corporation|Limited|Group|Co\.|LLC|PLC|AG|SE|Company|Holdings|LLP)\b"
-        orglist = self.__get_org_name(doc)
+        orglist = self.__get_org_name(nlp_doc)
         for o in orglist:
             match=re.search(pattern, o, re.IGNORECASE)
             if match is not None:
@@ -75,9 +78,9 @@ class EnglishExtractor(Extractor):
         return False
 
 
-    def __get_work_date_company(self,doc):
+    def __get_work_date_company(self, nlp_doc):
         work_date_company={}
-        ents = doc.ents
+        ents = nlp_doc.ents
         ents_list=[]
         for ent in ents:
             if ent.label_ == 'DATE' or ent.label_ == 'ORG':
@@ -95,9 +98,9 @@ class EnglishExtractor(Extractor):
         return False
 
 
-    def __get_education_date(self,doc):
+    def __get_education_date(self, nlp_doc):
         education_date={}
-        ents = doc.ents
+        ents = nlp_doc.ents
         ents_list = []
         for ent in ents:
             if ent.label_ == 'DATE' or ent.label_ == 'ORG':
@@ -110,9 +113,21 @@ class EnglishExtractor(Extractor):
 
         return education_date
 
-    def __get_age(self,doc):
-        ents = doc.ents
-        ents_list = []
+    def __get_age(self,nlp_doc):
+        #ents = doc.ents
+        #ents_list = []
+
+        pattern=r"(?:Birth Year|Year of Birth|Born in|Graduated in|from|Birth Date)\s*[:\-]?[ \t]*(?:19|20)\d{2}"
+        # for ent in ents:
+        #     # if ent.label_ == 'QUANTITY' or ent.label_ == 'CARDINAL'  :
+        #     #     ents_list.append(ent)
+        #     print(ent.text, ent.label_)
+        age_res=re.search(pattern, self.doc.text, re.IGNORECASE).group()
+             # if re.search(pattern, token.text, re.IGNORECASE):
+             #     age_list.append(token.text)
+        res=re.search(r"\w*(\d+)",age_res,re.IGNORECASE).group()
+
+        return res
 
 
 
