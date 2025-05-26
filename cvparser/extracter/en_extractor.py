@@ -17,9 +17,11 @@ class EnglishExtractor(Extractor):
         #     if token.ent_type_=="ORG" or token.ent_type_=="DATE":
         #      print( token.text,token.ent_type_)
         #print(self.__get_school_list(doc))
-        print("----------------------")
+
         #print(self.__get_company_list(doc))
         print(self.__get_work_date_company(doc))
+        print("----------------------")
+        print(self.__get_education_date(doc))
 
 
     def __get_person_name(self,doc):
@@ -49,7 +51,7 @@ class EnglishExtractor(Extractor):
         school_list=[]
         orglist=self.__get_org_name(doc)
         for o in orglist:
-            match=re.search(".+?school|.+?college|.+?university", o,re.IGNORECASE)
+            match=re.search(r".+?school|.+?college|.+?university", o,re.IGNORECASE)
             if match is not None:
                school_list.append(match.group())
 
@@ -85,6 +87,34 @@ class EnglishExtractor(Extractor):
                 work_date_company.update({ents_list[i].text: ents_list[i+1].text})
 
         return work_date_company
+
+    def __is_school(self,text):
+        pattern=r".+?school|.+?college|.+?university"
+        if re.search(pattern, text, re.IGNORECASE):
+            return True
+        return False
+
+
+    def __get_education_date(self,doc):
+        education_date={}
+        ents = doc.ents
+        ents_list = []
+        for ent in ents:
+            if ent.label_ == 'DATE' or ent.label_ == 'ORG':
+                ents_list.append(ent)
+
+        for i in range(len(ents_list)):
+            if self.__is_school(ents_list[i].text) and i+1 < len(ents_list) and ents_list[i+1].label_ == 'DATE':
+                education_date.update({ents_list[i].text: ents_list[i+1].text})
+
+
+        return education_date
+
+    def __get_age(self,doc):
+        ents = doc.ents
+        ents_list = []
+
+
 
 
 
