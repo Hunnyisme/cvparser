@@ -1,6 +1,8 @@
 from cvparser.extracter.extractor import Extractor
 import spacy
 import re
+import phonenumbers
+from phonenumbers import PhoneNumberFormat
 
 class EnglishExtractor(Extractor):
     def __init__(self, doc):
@@ -22,9 +24,12 @@ class EnglishExtractor(Extractor):
         print(self.__get_work_date_company(nlp_doc))
         print("----------------------")
         print(self.__get_education_date(nlp_doc))
-        print("----------------------")
-        self.__get_age(nlp_doc)
         #print("----------------------")
+        #self.__get_age(nlp_doc)
+        print("----------------------")
+        print(self.get_personal_information())
+        print("----------------------")
+        print(self.extract_email_addresses())
 
 
     def __get_person_name(self, nlp_doc):
@@ -114,22 +119,62 @@ class EnglishExtractor(Extractor):
         return education_date
 
     def __get_age(self,nlp_doc):
-        #ents = doc.ents
-        #ents_list = []
 
         pattern=r"(?:Birth Year|Year of Birth|Born in|Graduated in|from|Birth Date)\s*[:\-]?[ \t]*(?:19|20)\d{2}"
-        # for ent in ents:
-        #     # if ent.label_ == 'QUANTITY' or ent.label_ == 'CARDINAL'  :
-        #     #     ents_list.append(ent)
-        #     print(ent.text, ent.label_)
+
         age_res=re.search(pattern, self.doc.text, re.IGNORECASE).group()
-             # if re.search(pattern, token.text, re.IGNORECASE):
-             #     age_list.append(token.text)
+
         res=re.search(r"\w*(\d+)",age_res,re.IGNORECASE).group()
 
         return res
 
+    def __get_company_discription(nlp_doc):
+          raise NotImplementedError
 
+
+
+    def get_personal_information(self):
+
+        return self.__extract_phone_numbers()
+
+    def __extract_phone_numbers(self):
+        found_numbers = set()  # 使用 set 去重
+
+        phone_pattern = re.compile(
+            r'(?:(?:\+\d{1,3}[-.\s]*)?  (e.g., +1, +86)(?:(?:\(\d{1,4}\)|\d{1,4})[-.\s]*)? \d{2,4}[-.\s]* ){2,}\d{2,4} | \b\d{7,15}\b ',
+            re.VERBOSE)
+
+        # 遍历所有可能的电话号码匹配项
+        for match in phone_pattern.finditer(self.doc.text):
+            potential_number_str = match.group(0)
+
+            try:
+                # 尝试使用 phonenumbers 库解析号码
+                # default_region 参数很重要，当号码没有国家代码时，它会尝试根据该地区解析
+                parsed_number = phonenumbers.parse(potential_number_str,'AU')
+
+                # 检查号码是否有效且可能
+                if phonenumbers.is_valid_number(parsed_number) and phonenumbers.is_possible_number(parsed_number):
+                    # 将有效号码格式化为 E.164 国际标准格式（例如 +61412345678）
+                    # 也可以选择 PhoneNumberFormat.NATIONAL (例如 (04) 1234 5678)
+                    formatted_number = phonenumbers.format_number(parsed_number, PhoneNumberFormat.E164)
+                    found_numbers.add(formatted_number)
+                # else:
+                # print(f"Skipping invalid/impossible number: {potential_number_str}")
+            except phonenumbers.NumberParseException:
+                # 如果解析失败，则跳过此匹配项
+                # print(f"Failed to parse: {potential_number_str}")
+                pass
+
+            return list(found_numbers)
+
+    def extract_email_addresses(self):
+        """
+        从文本中提取邮箱地址。
+        匹配标准的邮箱地址格式。
+        """
+        email_pattern = re.compile(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}')
+        return list(set(email_pattern.findall(self.doc.text)))  # 使用 set 去重
 
 
 
