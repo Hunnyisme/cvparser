@@ -6,10 +6,10 @@ from cvparser.utility.ult import filetype_detect
 
 class ParserFactory:
     @staticmethod
-    def get_parser(file,filetype:FileType=None):
+    def get_parser(file):
         _filetype = filetype_detect(file)
-        if filetype is None:
-            if _filetype == FileType.PDF.value:
+
+        if _filetype == FileType.PDF.value:
                 return Pdfparser(file, _filetype)
 
 

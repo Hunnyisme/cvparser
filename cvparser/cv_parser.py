@@ -6,11 +6,11 @@ from cvparser.Enum.filetype import *
 
 class CvParser:
     @staticmethod
-    def load(file:str,filetype:FileType=None):
+    def load(file:str):
         if "\\" in file or "/" in file:
             file = re.sub(r"[/\\]+", "/", file)
         file_path=Path(file).resolve(strict=False)
 
-        return ParserFactory.get_parser(str(file_path), filetype)
+        return ParserFactory.get_parser(str(file_path))
 
 

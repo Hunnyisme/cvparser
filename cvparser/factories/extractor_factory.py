@@ -9,7 +9,7 @@ class ExtractorFactory:
     for creating extractor
     """
     @staticmethod
-    def get_extractor(doc:Doc,language:Language=None):
+    def get_extractor(doc:Doc,country,language:Language=None):
         if language is None:
             language=language_detect(doc.text)
 
@@ -17,6 +17,6 @@ class ExtractorFactory:
 
 
         if language == Language.en.value:
-            return EnglishExtractor(doc)
+            return EnglishExtractor(doc,country)
 
 

@@ -12,6 +12,7 @@ class parser:
         self.file=file
 
 
+
     @abstractmethod
     def parse(self):
         """return a cv object presenting content of a cv"""

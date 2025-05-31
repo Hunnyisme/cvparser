@@ -1,7 +1,7 @@
 from langdetect import detect
 import os
 import re
-def filetype_detect(file:str):
+def filetype_detect(file:str)->str:
     filetype = file.split('.')[-1]
     return filetype
 

@@ -24,7 +24,7 @@ if __name__ == '__main__':
     #print(str(sanitize_path("E:\\onedrivefiles\\OneDrive\\PycharmProjects\\cvparser\\test_data\\resume-de.pdf")))
     doc=parser.parse()
     print(doc.text)
-    en_extractor=ExtractorFactory.get_extractor(doc).extract()
+    en_extractor=ExtractorFactory.get_extractor(doc,'au').extract()
 
     # print(parser.file)
 
