@@ -10,13 +10,20 @@ class ExtractorFactory:
     """
     @staticmethod
     def get_extractor(doc:Doc,country,language:Language=None):
-        if language is None:
-            language=language_detect(doc.text)
+        try:
+            if language is None:
+                language = language_detect(doc.text)
 
-        print(language)
+            if language == Language.en.value:
+                return EnglishExtractor(doc, country)
+
+            else:
+                raise NotImplementedError("language type not supported yet")
+
+        except Exception as e:
+            print(e)
+            return None
 
 
-        if language == Language.en.value:
-            return EnglishExtractor(doc,country)
 
 

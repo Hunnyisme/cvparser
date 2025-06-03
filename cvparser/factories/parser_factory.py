@@ -11,6 +11,8 @@ class ParserFactory:
 
         if _filetype == FileType.PDF.value:
                 return Pdfparser(file, _filetype)
+        else:
+            raise NotImplementedError("File types not supported yet")
 
 
 
