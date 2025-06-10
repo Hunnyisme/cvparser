@@ -67,7 +67,9 @@ print(the_cv.name)
 
 
 
+<h2>
+Notice
+</h2>
 
-
-
+This project has a huge space to improve so far. It only supports an lanugage type of English and a file type of PDF. I will keep updating it and welcome anyone to join.
 
