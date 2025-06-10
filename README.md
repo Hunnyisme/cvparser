@@ -1,7 +1,7 @@
 <p align="center">
     <img src=".\assets\cvparserlogo.png" alt="" style="width:60%; height:300px"></imag></p>
 
-<h1 style="text-align:center"> CVPARSRR </h1>
+<h1 align="center"> CVPARSRR </h1>
 
 <p align="center">
     <img alt="Static Badge" src="https://img.shields.io/badge/license-Apache2.0-blue">
