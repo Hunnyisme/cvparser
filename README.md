@@ -1,4 +1,4 @@
-<p style="align:center">
+<p align="center">
     <img src=".\assets\cvparserlogo.png" alt="" style="width:60%; height:300px"></imag></p>
 
 <h1 style="text-align:center"> CVPARSRR </h1>
