@@ -10,15 +10,8 @@ from cvparser.utility.ult import *
 from cvparser.cv_parser import *
 if __name__ == '__main__':
 
-    # def sanitize_path(file_path: str) -> Path:
-    #     # 替换混合路径分隔符
-    #     if "\\" in file_path or "/" in file_path:
-    #         # 统一替换为 POSIX 风格
-    #         file_path = re.sub(r"[\\/]+", "/", file_path)
-    #
-    #     # 转换为 Path 对象并返回绝对路径
-    #     return Path(file_path).resolve(strict=False)
-    parser=CvParser.load("E:\\PycharmProjects\cvparser\\test_data\\resume_template.pdf")
+
+    parser=CvParser.load("")
 
     #print(FileType.PDF.value)
     #print(str(sanitize_path("E:\\onedrivefiles\\OneDrive\\PycharmProjects\\cvparser\\test_data\\resume-de.pdf")))
