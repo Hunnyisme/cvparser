@@ -18,7 +18,7 @@ if __name__ == '__main__':
     #
     #     # 转换为 Path 对象并返回绝对路径
     #     return Path(file_path).resolve(strict=False)
-    parser=CvParser.load("E:\\PycharmProjects\cvparser\\test_data\\resume_template2.pdf")
+    parser=CvParser.load("E:\\PycharmProjects\cvparser\\test_data\\resume_template.pdf")
 
     #print(FileType.PDF.value)
     #print(str(sanitize_path("E:\\onedrivefiles\\OneDrive\\PycharmProjects\\cvparser\\test_data\\resume-de.pdf")))
