@@ -19,7 +19,7 @@ Install
 please use this command to install:
 
 ```
-pip install cvparser
+pip install py-cv-parser
 ```
 
 Also need to install this NLP model:
