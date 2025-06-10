@@ -25,9 +25,11 @@ if __name__ == '__main__':
     doc=parser.parse()
     print(doc.text)
     print("-----------------------")
-    the_cv=ExtractorFactory.get_extractor(doc,'china').extract()
+    the_cv=ExtractorFactory.get_extractor(doc,'Australia').extract()
     print(the_cv)
-
+    # check single
+    print(the_cv.skills)
+    print(the_cv.name)
     # print(parser.file)
 
     # print(parser.filetype)
