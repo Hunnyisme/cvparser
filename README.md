@@ -49,7 +49,7 @@ doc=parser.parse()
 Then, analyze and extract information 
 
 ```
-the_cv=ExtractorFactory.get_extractor(doc,'Australia').extract() # The second parameter is the country of the resume.
+the_cv=CvParser.extract(doc,'AU')
 ```
 
 Finally,  you can check those information.
