@@ -11,14 +11,14 @@ from cvparser.cv_parser import *
 if __name__ == '__main__':
 
 
-    parser=CvParser.load("")
+    parser=CvParser.load("E:\\My Drive (jetchill521@gmail.com)\\resumes\\resume-de.pdf")
 
     #print(FileType.PDF.value)
     #print(str(sanitize_path("E:\\onedrivefiles\\OneDrive\\PycharmProjects\\cvparser\\test_data\\resume-de.pdf")))
     doc=parser.parse()
     print(doc.text)
     print("-----------------------")
-    the_cv=ExtractorFactory.get_extractor(doc,'Australia').extract()
+    the_cv=CvParser.extract(doc,'AU')
     print(the_cv)
     # check single
     print(the_cv.skills)
