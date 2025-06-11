@@ -1,0 +1,41 @@
+# .github/workflows/release.yml
+
+name: 'Publish Python Package to TestPyPI via Trusted Publisher'
+
+on:
+  release:
+    types: [published]
+
+# 关键改动 1：添加权限设置
+# id-token: write 权限是让 Action 能够从 GitHub 获取 OIDC 令牌的关键
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    # 关键改动 2：指定运行环境，名称必须与在 TestPyPI 上设置的完全一致
+    environment: pypi
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Check out repository code'
+        uses: actions/checkout@v4
+
+      - name: 'Set up Python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 'Install dependencies'
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+
+      - name: 'Build package'
+        run: python -m build
+
+      # 关键改动 3：上传步骤现在不需要任何 env 变量
+      # twine 会自动检测 OIDC 令牌并使用它进行验证
+      - name: 'Publish package to TestPyPI'
+        run: twine upload dist/*
